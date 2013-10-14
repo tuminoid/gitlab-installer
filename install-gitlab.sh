@@ -71,6 +71,7 @@ cd /home/git/gitlab
 sudo -u git -H git checkout 6-1-stable
 sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
 sudo -u git -H sed -i 's,host: localhost,host: 127.0.0.1,' config/gitlab.yml
+sudo -u git -H sed -i 's,gitlab_url: "http://localhost/",gitlab_url: "http://127.0.0.1/",' config.yml
 sudo -u git -H sed -i 's,email_from: gitlab@localhost,email_from: tumi+gitlab@tumi.fi,' config/gitlab.yml
 
 chown -R git log/
