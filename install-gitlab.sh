@@ -62,7 +62,6 @@ CREATE DATABASE IF NOT EXISTS \`gitlabhq_production\` DEFAULT CHARACTER SET \`ut
 GRANT SELECT, LOCK TABLES, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON \`gitlabhq_production\`.* TO 'gitlab'@'localhost';
 FLUSH PRIVILEGES;
 EOF
-sudo -u git -H mysql -u gitlab --password=pass -D gitlabhq_production
 
 # install gitlab
 cd /home/git
