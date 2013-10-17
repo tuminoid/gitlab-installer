@@ -127,6 +127,7 @@ sudo -u git -H sed -i 's,server_name YOUR_SERVER_FQDN;,server_name 127.0.0.1;,' 
 service nginx restart
 
 # save cache - FIXME
-mkdir -p /vagrant/.cache/deb
-cp /var/cache/apt/archives/*.deb /vagrant/.cache/deb/
-
+if [ -d "/vagrant" ]; then
+  mkdir -p /vagrant/.cache/deb
+  cp /var/cache/apt/archives/*.deb /vagrant/.cache/deb/
+fi
