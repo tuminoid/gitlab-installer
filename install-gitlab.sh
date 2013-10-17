@@ -113,9 +113,10 @@ cp lib/support/init.d/gitlab /etc/init.d/gitlab
 chmod +x /etc/init.d/gitlab
 update-rc.d gitlab defaults 21
 
-# check installation
+# check installation and run services
 sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production
 service gitlab start
+sudo -u git -H bundle exec rake sidekiq:start RAILS_ENV=production
 sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
 
 # install nginx
