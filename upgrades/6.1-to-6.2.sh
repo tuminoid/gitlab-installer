@@ -1,5 +1,8 @@
 #!/bin/sh -e
 
+# scripted installation of 6.1 to 6.2 upgrade
+# https://github.com/gitlabhq/gitlabhq/blob/master/doc/update/6.1-to-6.2.md
+
 cd /home/git/gitlab
 
 # take backup
