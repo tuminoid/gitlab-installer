@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# dev stuff - FIXME
-if [ -d "/vagrant/.cache/deb" ]; then
-  mkdir -p /var/cache/apt/archives
-  cp /vagrant/.cache/deb/*.deb /var/cache/apt/archives/
-fi
-
 # make sure we have sudo and editor
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
@@ -19,7 +13,7 @@ apt-get -y upgrade
 # install dependencies
 apt-get install -y build-essential zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev \
   libncurses5-dev libffi-dev curl git-core openssh-server redis-server checkinstall libxml2-dev \
-  libxslt-dev libcurl4-openssl-dev libicu-dev
+  libxslt-dev libcurl4-openssl-dev libicu-dev logrotate
 
 # install and verify python and postfix
 echo 'postfix postfix/main_mailer_type select Internet Site' | debconf-set-selections
@@ -68,10 +62,11 @@ cd /home/git
 sudo -u git -H git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd /home/git/gitlab
 sudo -u git -H git checkout 6-1-stable
+#sudo -u git -H git checkout 6-2-stable
 sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
 sudo -u git -H sed -i 's,host: localhost,host: 127.0.0.1,' config/gitlab.yml
 sudo -u git -H sed -i 's,gitlab_url: "http://localhost/",gitlab_url: "http://127.0.0.1/",' config/gitlab.yml
-sudo -u git -H sed -i 's,email_from: gitlab@localhost,email_from: tumi+gitlab@tumi.fi,' config/gitlab.yml
+sudo -u git -H sed -i 's,email_from: gitlab@localhost,email_from: no-reply@gitlab.invalid,' config/gitlab.yml
 
 chown -R git log/
 chown -R git tmp/
@@ -91,7 +86,7 @@ sudo -u git -H cp config/unicorn.rb.example config/unicorn.rb
 sudo -u git -H sed -i 's,worker_processes 2,worker_processes 4,' config/unicorn.rb
 
 sudo -u git -H git config --global user.name "GitLab"
-sudo -u git -H git config --global user.email "tumi+gitlab@tumi.fi"
+sudo -u git -H git config --global user.email "no-reply@gitlab.invalid"
 sudo -u git -H git config --global core.autocrlf input
 
 # configure gitlab db
@@ -99,6 +94,10 @@ sudo -u git cp config/database.yml.mysql config/database.yml
 sudo -u git -H sed -i 's,username: root,username: gitlab,' config/database.yml
 sudo -u git -H sed -i 's,password: "secure password",password: "pass",' config/database.yml
 sudo -u git -H chmod o-rwx config/database.yml
+
+# enable rack attack
+# sudo -u git -H cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
+# sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attack,' config/application.rb
 
 # install more gems
 cd /home/git/gitlab
@@ -113,10 +112,12 @@ cp lib/support/init.d/gitlab /etc/init.d/gitlab
 chmod +x /etc/init.d/gitlab
 update-rc.d gitlab defaults 21
 
+# setup logrotate
+cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab
+
 # check installation and run services
 sudo -u git -H bundle exec rake gitlab:env:info RAILS_ENV=production
 service gitlab start
-sudo -u git -H bundle exec rake sidekiq:start RAILS_ENV=production
 sudo -u git -H bundle exec rake gitlab:check RAILS_ENV=production
 
 # install nginx
@@ -126,8 +127,3 @@ ln -s /etc/nginx/sites-available/gitlab /etc/nginx/sites-enabled/gitlab
 sudo -u git -H sed -i 's,server_name YOUR_SERVER_FQDN;,server_name 127.0.0.1;,' config/database.yml
 service nginx restart
 
-# save cache - FIXME
-if [ -d "/vagrant" ]; then
-  mkdir -p /vagrant/.cache/deb
-  cp /var/cache/apt/archives/*.deb /vagrant/.cache/deb/
-fi
