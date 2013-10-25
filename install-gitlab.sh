@@ -61,8 +61,7 @@ EOF
 cd /home/git
 sudo -u git -H git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd /home/git/gitlab
-sudo -u git -H git checkout 6-1-stable
-#sudo -u git -H git checkout 6-2-stable
+sudo -u git -H git checkout 6-2-stable
 sudo -u git -H cp config/gitlab.yml.example config/gitlab.yml
 sudo -u git -H sed -i 's,host: localhost,host: 127.0.0.1,' config/gitlab.yml
 sudo -u git -H sed -i 's,gitlab_url: "http://localhost/",gitlab_url: "http://127.0.0.1/",' config/gitlab.yml
@@ -96,8 +95,8 @@ sudo -u git -H sed -i 's,password: "secure password",password: "pass",' config/d
 sudo -u git -H chmod o-rwx config/database.yml
 
 # enable rack attack
-# sudo -u git -H cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
-# sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attack,' config/application.rb
+sudo -u git -H cp config/initializers/rack_attack.rb.example config/initializers/rack_attack.rb
+sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attack,' config/application.rb
 
 # install more gems
 cd /home/git/gitlab
