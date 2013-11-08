@@ -18,4 +18,9 @@ Vagrant.configure("2") do |config|
 
     gitlab.vm.provision :shell, :path => "install-gitlab.sh"
   end
+
+  config.vm.provider "vmware_fusion" do |v, override|
+    override.vm.box = "precise64_fusion"
+    override.vm.box_url = "http://files.vagrantup.com/precise64_vmware.box"
+  end
 end
