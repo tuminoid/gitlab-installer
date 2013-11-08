@@ -111,7 +111,7 @@ EOF
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd $GITHOME/gitlab
-$GITSUDO git checkout 6.2.0
+$GITSUDO git checkout v6.2.0
 $GITSUDO cp config/gitlab.yml.example config/gitlab.yml
 $GITSUDO sed -i "s,host: localhost,host: $GITLAB_SERVER," config/gitlab.yml
 $GITSUDO sed -i "s,email_from: gitlab@localhost,email_from: $GITLAB_EMAIL," config/gitlab.yml
