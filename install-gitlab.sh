@@ -78,8 +78,8 @@ which python2 || ln -sf /usr/bin/python /usr/bin/python2
 sed -i 's,inet_interfaces = all,inet_interfaces = 127.0.0.1,' /etc/postfix/main.cf
 service postfix restart
 
-# install gem bundler
-gem install bundler --no-ri --no-rdoc
+# HACK: try three times, ssl has issues from time to time
+gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc
 
 # install system user
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
@@ -152,7 +152,8 @@ sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attac
 # install more gems
 cd /home/$GITLAB_USER/gitlab
 gem install charlock_holmes --version '0.6.9.4'
-$GITSUDO bundle install --deployment --without development test postgres aws
+# HACK: try three times, there is sometimes issues with ssl with bundler 
+$GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws
 
 # initialize database and advanced features
 echo "yes" | $GITSUDO bundle exec rake gitlab:setup RAILS_ENV=production
