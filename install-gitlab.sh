@@ -26,6 +26,9 @@ SERVER_NGINX_NAME="gitlab6"
 # Defaults work just fine
 # ---------------------------------------------
 
+# Rubygems server
+RUBYGEMS_SOURCE="http://rubygems.org"
+
 # Postfix hostname
 POSTFIX_HOSTNAME="precise64"
 
@@ -83,12 +86,14 @@ gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc |
 
 # install system user
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
+$GITSUDO git config --global user.name "GitLab"
+$GITSUDO git config --global user.email $GITLAB_EMAIL
 
 # install gitlab shell
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlab-shell.git
 cd gitlab-shell
-$GITSUDO git checkout v1.7.1
+$GITSUDO git checkout v1.7.9
 $GITSUDO cp config.yml.example config.yml
 $GITSUDO sed -i "s,gitlab_url: \"http://localhost/\",gitlab_url: \"http://$GITLAB_SERVER/\"," config.yml
 $GITSUDO sed -i "s,\"/home/git/,\"$GITHOME/,g" config.yml
@@ -111,7 +116,7 @@ EOF
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd $GITHOME/gitlab
-$GITSUDO git checkout v6.2.0
+$GITSUDO git checkout v6.3.0
 $GITSUDO cp config/gitlab.yml.example config/gitlab.yml
 $GITSUDO sed -i "s,host: localhost,host: $GITLAB_SERVER," config/gitlab.yml
 $GITSUDO sed -i "s,email_from: gitlab@localhost,email_from: $GITLAB_EMAIL," config/gitlab.yml
@@ -150,10 +155,12 @@ $GITSUDO cp config/initializers/rack_attack.rb.example config/initializers/rack_
 sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attack,' config/application.rb
 
 # install more gems
+# there is issues with rubygems ssl certs, thus we change the source, see config in the beginning
 cd /home/$GITLAB_USER/gitlab
+$GITSUDO sed -i -e "s,source \"https://rubygems.org\",source \"$RUBYGEMS_SOURCE\"," Gemfile
 gem install charlock_holmes --version '0.6.9.4'
-# HACK: try three times, there is sometimes issues with ssl with bundler 
 $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws
+$GITSUDO sed -i -e "s,source \"$RUBYGEMS_SOURCE\",source \"https://rubygems.org\"," Gemfile
 
 # initialize database and advanced features
 echo "yes" | $GITSUDO bundle exec rake gitlab:setup RAILS_ENV=production
@@ -179,3 +186,5 @@ $GITSUDO bundle exec rake gitlab:env:info RAILS_ENV=production
 service gitlab start
 $GITSUDO bundle exec rake gitlab:check RAILS_ENV=production
 
+# done
+echo "Victory! Running GitLab 6.3.0!"
