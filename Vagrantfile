@@ -17,7 +17,12 @@ Vagrant.configure("2") do |config|
     gitlab.vm.network :forwarded_port, guest: 3000, host: 23000
     # gitlab.vm.network :forwarded_port, guest: 443, host: 20443
 
+    # Uncomment the ones you do not want
     gitlab.vm.provision :shell, :path => "install-gitlab.sh"
+    gitlab.vm.provision :shell, :path => "install-gitlab-ci.sh"
+
+    # CI Runner cannot be automated in a full install as it needs a token from CI
+    # gitlab.vm.provision :shell, :path => "install-gitlab-ci-runner.sh"
   end
 
   config.vm.provider "vmware_fusion" do |v, override|
