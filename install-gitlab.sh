@@ -153,7 +153,7 @@ sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attac
 
 # install more gems
 # there is issues with rubygems ssl certs, thus we change the source, see config in the beginning
-cd /home/$GITLAB_USER/gitlab
+cd $GITHOME/gitlab
 $GITSUDO sed -i -e "s,source \"https://rubygems.org\",source \"$RUBYGEMS_SOURCE\"," Gemfile
 gem install charlock_holmes --version '0.6.9.4'
 $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws
