@@ -11,15 +11,20 @@ MYSQL_ROOT_PASSWORD="mysqlpass"
 # Gitlab_CI user MySQL password
 MYSQL_GITLABCI_PASSWORD="gitlabcipass"
 
-# Gitlab email address
+# Gitlab address
 GITLABCI_GITLAB_SERVER="http://127.0.0.1"
-GITLABCI_SERVER="127.0.0.1"
-GITLABCI_EMAIL="no-reply@gitlab-ci.invalid"
-GITLABCI_SUPPORT_EMAIL="support@gitlab-ci.invalid"
 
-# Server FQDN
+# email
+GITLABCI_EMAIL="no-reply@gitlabci.invalid"
+
+# Nginx server FQDN
 SERVERCI_NGINX_FQDN="127.0.0.1"
 SERVERCI_NGINX_NAME="gitlab_ci"
+
+# Nginx server port
+SERVERCI_NGINX_PORT="3000"
+# If CI is on a stand-alone server, use this instead
+# SERVERCI_NGINX_PORT="*:80 default_server"
 
 
 # ---------------------------------------------
@@ -58,10 +63,8 @@ apt-get -y install sudo nano debconf-utils python-software-properties
 apt-add-repository -y ppa:git-core/ppa
 # we also need ruby 2.0
 add-apt-repository -y ppa:brightbox/ruby-ng-experimental
-
-# update and upgrade
+# update
 apt-get -y update
-apt-get -y upgrade
 
 # install dependencies
 apt-get -y install wget curl gcc checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev \
@@ -73,7 +76,6 @@ apt-get -y install wget curl gcc checkinstall libxml2-dev libxslt-dev libcurl4-o
 gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc
 
 # install system user
-# TODO CHECK GIT
 adduser --disabled-login --gecos 'GitLab CI' $GITLABCI_USER
 cd $CIHOME
 $CISUDO git config --global user.name "GitLab CI"
@@ -87,9 +89,9 @@ echo "mysql-server-5.5 mysql-server/root_password password $MYSQL_ROOT_PASSWORD"
 apt-get install -y mysql-server mysql-client libmysqlclient-dev
 
 cat <<EOF | mysql -u root --password=$MYSQL_ROOT_PASSWORD
-CREATE DATABASE IF NOT EXISTS `gitlab_ci_production` DEFAULT CHARACTER SET `utf8` COLLATE `utf8_unicode_ci`;
 CREATE USER 'gitlab_ci'@'localhost' IDENTIFIED BY '$MYSQL_GITLABCI_PASSWORD';
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON `gitlab_ci_production`.* TO 'gitlab_ci'@'localhost';
+CREATE DATABASE IF NOT EXISTS \`gitlab_ci_production\` DEFAULT CHARACTER SET \`utf8\` COLLATE \`utf8_unicode_ci\`;
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER ON \`gitlab_ci_production\`.* TO 'gitlab_ci'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
@@ -103,7 +105,6 @@ $CISUDO git checkout v4.0.0
 $CISUDO cp config/application.yml.example config/application.yml
 $CISUDO sed -i "s,- 'https://dev.gitlab.org/',- '$GITLABCI_GITLAB_SERVER'," config/application.yml
 $CISUDO sed -i '/staging.gitlab.org/d' config/application.yml
-# $CISUDO sed -i "s,https: false,https: true," config/application.yml
 
 # configure puma
 $CISUDO cp config/puma.rb.example config/puma.rb
@@ -139,12 +140,13 @@ update-rc.d gitlab_ci defaults 21
 apt-get install -y nginx
 cp lib/support/nginx/gitlab_ci /etc/nginx/sites-available/$SERVERCI_NGINX_NAME
 sed -i "s,server_name ci.gitlab.org;,server_name $SERVERCI_NGINX_FQDN;," /etc/nginx/sites-available/$SERVERCI_NGINX_NAME
+sed -i "s,listen 80 default_server;,listen $SERVERCI_NGINX_PORT;," /etc/nginx/sites-available/$SERVERCI_NGINX_NAME
 ln -s /etc/nginx/sites-available/$SERVERCI_NGINX_NAME /etc/nginx/sites-enabled/$SERVERCI_NGINX_NAME
 rm -f /etc/nginx/sites-enabled/default
 service nginx restart
 
-# check installation and run services
+# run services
 service gitlab_ci start
 
 # done
-echo "Victory! Running GitLab 6.3.0!"
+echo "Victory! Running GitLab CI 4.0.0!"
