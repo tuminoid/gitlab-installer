@@ -88,6 +88,7 @@ gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc |
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
 $GITSUDO git config --global user.name "GitLab"
 $GITSUDO git config --global user.email $GITLAB_EMAIL
+$GITSUDO git config --global core.autocrlf input
 
 # install gitlab shell
 cd $GITHOME
@@ -139,10 +140,6 @@ chmod -R u+rwX  public/uploads
 
 $GITSUDO cp config/unicorn.rb.example config/unicorn.rb
 $GITSUDO sed -i "s,worker_processes 2,worker_processes $WORKER_PROCESSES," config/unicorn.rb
-
-$GITSUDO git config --global user.name "GitLab"
-$GITSUDO git config --global user.email "$GITLAB_EMAIL"
-$GITSUDO git config --global core.autocrlf input
 
 # configure gitlab db
 $GITSUDO cp config/database.yml.mysql config/database.yml
