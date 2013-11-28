@@ -86,6 +86,7 @@ gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc |
 
 # install system user
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
+cd $GITHOME
 $GITSUDO git config --global user.name "GitLab"
 $GITSUDO git config --global user.email $GITLAB_EMAIL
 $GITSUDO git config --global core.autocrlf input
@@ -130,12 +131,11 @@ chmod -R u+rwX  log/
 chmod -R u+rwX  tmp/
 
 $GITSUDO mkdir $GITHOME/gitlab-satellites
-$GITSUDO mkdir tmp/pids/
-$GITSUDO mkdir tmp/sockets/
+$GITSUDO mkdir -p tmp/pids/ tmp/sockets/
 chmod -R u+rwX  tmp/pids/
 chmod -R u+rwX  tmp/sockets/
 
-$GITSUDO mkdir public/uploads
+$GITSUDO mkdir -p public/uploads
 chmod -R u+rwX  public/uploads
 
 $GITSUDO cp config/unicorn.rb.example config/unicorn.rb
