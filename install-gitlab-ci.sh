@@ -137,16 +137,14 @@ update-rc.d gitlab_ci defaults 21
 
 # install nginx
 apt-get install -y nginx
-cp lib/support/nginx/gitlab_ci /etc/nginx/sites-available/$SERVER_NGINX_NAME
-sed -i "s,server_name YOUR_SERVER_FQDN;,server_name $SERVERCI_NGINX_FQDN;," /etc/nginx/sites-available/$SERVER_NGINX_NAME
-ln -s /etc/nginx/sites-available/$SERVER_NGINX_NAME /etc/nginx/sites-enabled/$SERVER_NGINX_NAME
+cp lib/support/nginx/gitlab_ci /etc/nginx/sites-available/$SERVERCI_NGINX_NAME
+sed -i "s,server_name ci.gitlab.org;,server_name $SERVERCI_NGINX_FQDN;," /etc/nginx/sites-available/$SERVERCI_NGINX_NAME
+ln -s /etc/nginx/sites-available/$SERVERCI_NGINX_NAME /etc/nginx/sites-enabled/$SERVERCI_NGINX_NAME
 rm -f /etc/nginx/sites-enabled/default
 service nginx restart
 
 # check installation and run services
-service gitlab start
-$CISUDO bundle exec rake gitlab:env:info RAILS_ENV=production
-$CISUDO bundle exec rake gitlab:check RAILS_ENV=production
+service gitlab_ci start
 
 # done
 echo "Victory! Running GitLab 6.3.0!"
