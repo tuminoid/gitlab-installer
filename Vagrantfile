@@ -6,7 +6,7 @@
 Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.customize [ "modifyvm", :id, "--cpus", "4" ]
-    v.customize [ "modifyvm", :id, "--memory", "1536" ]
+    v.customize [ "modifyvm", :id, "--memory", "4096" ]
   end
 
   config.vm.define :gitlab do |gitlab|
@@ -14,6 +14,7 @@ Vagrant.configure("2") do |config|
     gitlab.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
     gitlab.vm.network :forwarded_port, guest: 80, host: 20080
+    gitlab.vm.network :forwarded_port, guest: 3000, host: 23000
     # gitlab.vm.network :forwarded_port, guest: 443, host: 20443
 
     gitlab.vm.provision :shell, :path => "install-gitlab.sh"
