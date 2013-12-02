@@ -87,18 +87,22 @@ $CIRSUDO sed -i -e "s,source 'https://rubygems.org',source '$RUBYGEMS_SOURCE'," 
 bundle install
 $CIRSUDO sed -i -e "s,source '$RUBYGEMS_SOURCE',source 'https://rubygems.org'," Gemfile
 
-$CIRSUDO REGISTRATION_TOKEN=$REGISTRATION_TOKEN CI_SERVER_URL=$CI_SERVER_URL\
-  bundle exec ./bin/setup
-ssh-keyscan -H $GITLAB_URL >> $CIRHOME/.ssh/known_hosts
+if [ ! -z "$REGISTRATION_TOKEN" ]; then
+  $CIRSUDO REGISTRATION_TOKEN=$REGISTRATION_TOKEN CI_SERVER_URL=$CI_SERVER_URL\
+    bundle exec ./bin/setup
+  ssh-keyscan -H $GITLAB_URL >> $CIRHOME/.ssh/known_hosts
 
-# install init script to start gitlab at boot
-cp lib/support/init.d/gitlab_ci_runner /etc/init.d/gitlab_ci_runner
-chmod +x /etc/init.d/gitlab_ci_runner
-sed -i "s,RUNNERS_NUM=1,RUNNERS_NUM=$CIR_SPAWN_COUNT," /etc/init.d/gitlab_ci_runner
-update-rc.d gitlab_ci_runner defaults 21
+  # install init script to start gitlab at boot
+  cp lib/support/init.d/gitlab_ci_runner /etc/init.d/gitlab_ci_runner
+  chmod +x /etc/init.d/gitlab_ci_runner
+  sed -i "s,RUNNERS_NUM=1,RUNNERS_NUM=$CIR_SPAWN_COUNT," /etc/init.d/gitlab_ci_runner
+  update-rc.d gitlab_ci_runner defaults 21
 
-# run services
-service gitlab_ci_runner start
+  # run services
+  service gitlab_ci_runner start
 
-# done
-echo "Victory! Running GitLab CI Runner with $CIR_COUNT workers!"
+  # done
+  echo "Victory! Running GitLab CI Runner with $CIR_COUNT workers!"
+else
+  echo "Final setup with REGISTRATION_TOKEN required. Dependencies installed!"
+fi
