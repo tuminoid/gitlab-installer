@@ -5,14 +5,14 @@
 # -----------------------------------------
 
 
-# Token from CI UI (mandatory change)
-REGISTRATION_TOKEN=""
+# Token from CI UI (mandatory change or must come from cmdline)
+REGISTRATION_TOKEN=${REGISTRATION_TOKEN:-""}
 
 # GitLab CI address
-CI_SERVER_URL="http://127.0.0.1:3000"
+CI_SERVER_URL=${CI_SERVER_URL:-"http://127.0.0.1:3000"}
 
-# GitLab address
-GITLAB_URL="127.0.0.1"
+# GitLab address (without protocol)
+GITLAB_URL=${GITLAB_URL:-"127.0.0.1"}
 
 # Make X runner dirs
 CIR_COUNT=1
