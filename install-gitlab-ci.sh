@@ -99,7 +99,7 @@ EOF
 cd $CIHOME
 $CISUDO git clone https://github.com/gitlabhq/gitlab-ci.git
 cd gitlab-ci
-$CISUDO git checkout v4.0.0
+$CISUDO git checkout v4.1.0
 
 # configure ci
 $CISUDO cp config/application.yml.example config/application.yml
@@ -149,4 +149,4 @@ service nginx restart
 service gitlab_ci start
 
 # done
-echo "Victory! Running GitLab CI 4.0.0!"
+echo "Victory! Running GitLab CI 4.1.0!"
