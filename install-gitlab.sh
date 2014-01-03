@@ -18,7 +18,7 @@ GITLAB_SUPPORT_EMAIL="support@gitlab.invalid"
 
 # Server FQDN
 SERVER_NGINX_FQDN="127.0.0.1"
-SERVER_NGINX_NAME="gitlab6"
+SERVER_NGINX_NAME="gitlab"
 
 
 # ---------------------------------------------
@@ -95,7 +95,7 @@ $GITSUDO git config --global core.autocrlf input
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlab-shell.git
 cd gitlab-shell
-$GITSUDO git checkout v1.7.9
+$GITSUDO git checkout v1.8.0
 $GITSUDO cp config.yml.example config.yml
 $GITSUDO sed -i "s,gitlab_url: \"http://localhost/\",gitlab_url: \"http://$GITLAB_SERVER/\"," config.yml
 $GITSUDO sed -i "s,\"/home/git/,\"$GITHOME/,g" config.yml
@@ -118,7 +118,7 @@ EOF
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd $GITHOME/gitlab
-$GITSUDO git checkout v6.3.0
+$GITSUDO git checkout v6.4.3
 $GITSUDO cp config/gitlab.yml.example config/gitlab.yml
 $GITSUDO sed -i "s,host: localhost,host: $GITLAB_SERVER," config/gitlab.yml
 $GITSUDO sed -i "s,email_from: gitlab@localhost,email_from: $GITLAB_EMAIL," config/gitlab.yml
@@ -143,7 +143,7 @@ $GITSUDO sed -i "s,worker_processes 2,worker_processes $WORKER_PROCESSES," confi
 
 # configure gitlab db
 $GITSUDO cp config/database.yml.mysql config/database.yml
-$GITSUDO sed -i "s,username: root,username: gitlab," config/database.yml
+$GITSUDO sed -i "s,username: git,username: gitlab," config/database.yml
 $GITSUDO sed -i "s,password: \"secure password\",password: \"$MYSQL_GITLAB_PASSWORD\"," config/database.yml
 $GITSUDO chmod o-rwx config/database.yml
 
@@ -184,4 +184,4 @@ service gitlab start
 $GITSUDO bundle exec rake gitlab:check RAILS_ENV=production
 
 # done
-echo "Victory! Running GitLab 6.3.0!"
+echo "Victory! Running GitLab 6.4.3!"
