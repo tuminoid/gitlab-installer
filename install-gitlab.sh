@@ -174,7 +174,7 @@ cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab
 apt-get install -y nginx
 cp lib/support/nginx/gitlab /etc/nginx/sites-available/$SERVER_NGINX_NAME
 sed -i "s,server_name YOUR_SERVER_FQDN;,server_name $SERVER_NGINX_FQDN;," /etc/nginx/sites-available/$SERVER_NGINX_NAME
-ln -s /etc/nginx/sites-available/$SERVER_NGINX_NAME /etc/nginx/sites-enabled/$SERVER_NGINX_NAME
+ln -sf /etc/nginx/sites-available/$SERVER_NGINX_NAME /etc/nginx/sites-enabled/$SERVER_NGINX_NAME
 rm -f /etc/nginx/sites-enabled/default
 service nginx restart
 
