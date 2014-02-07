@@ -70,18 +70,11 @@ apt-get -y update
 apt-get -y upgrade
 
 # install dependencies
-apt-get install -y build-essential zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev \
-  libncurses5-dev libffi-dev curl git-core openssh-server redis-server checkinstall libxml2-dev \
-  libxslt-dev libcurl4-openssl-dev libicu-dev logrotate ruby2.0 ruby2.0-dev ruby2.0-doc
-
-# install and verify python and postfix
 echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
 echo "postfix postfix/mailname string $POSTFIX_HOSTNAME" | debconf-set-selections
-apt-get install -y python python2.7 python-docutils postfix
-python --version 2>&1 | grep -q "2."
-which python2 || ln -sf /usr/bin/python /usr/bin/python2
-sed -i 's,inet_interfaces = all,inet_interfaces = 127.0.0.1,' /etc/postfix/main.cf
-service postfix restart
+apt-get install -y curl git-core openssh-server redis-server checkinstall logrotate postfix \
+  build-essential libicu-dev libxml2-dev libxslt-dev \
+  ruby2.0 ruby2.0-dev
 
 # HACK: try three times, ssl has issues from time to time
 for i in 1 2 3; do
