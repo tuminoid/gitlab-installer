@@ -70,10 +70,8 @@ apt-get -y update
 apt-get -y upgrade
 
 # install dependencies
-apt-get -y install wget curl gcc checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev \
-  libreadline6-dev libc6-dev libssl-dev libmysql++-dev make build-essential \
-  zlib1g-dev openssh-server git-core libyaml-dev postfix libpq-dev libicu-dev \
-  redis-server logrotate ruby2.0 ruby2.0-dev ruby2.0-doc
+apt-get -y install curl build-essential checkinstall openssh-server git postfix redis-server logrotate \
+  ruby2.0 ruby2.0-dev
 
 # HACK: try three times, ssl has issues from time to time
 gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc
