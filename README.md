@@ -1,7 +1,7 @@
 gitlab-installer
 ================
 
-Easy Gitlab, Gitlab CI and Gitlab CI Runner installer. 
+Easy Gitlab, Gitlab CI and Gitlab CI Runner installer, targeting Ubuntu 12.04 LTS.
 
 You can run this installer with Vagrant or on live Ubuntu system (preferably empty).
 Installation follows https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md very closely.
