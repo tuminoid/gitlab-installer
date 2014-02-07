@@ -84,7 +84,9 @@ sed -i 's,inet_interfaces = all,inet_interfaces = 127.0.0.1,' /etc/postfix/main.
 service postfix restart
 
 # HACK: try three times, ssl has issues from time to time
-gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc
+for i in 1 2 3; do
+  gem install bundler --no-ri --no-rdoc && break
+done
 
 # install system user
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
@@ -158,7 +160,9 @@ sed -i 's,# config.middleware.use Rack::Attack,config.middleware.use Rack::Attac
 cd $GITHOME/gitlab
 $GITSUDO sed -i -e "s,source \"https://rubygems.org\",source \"$RUBYGEMS_SOURCE\"," Gemfile
 gem install charlock_holmes --version '0.6.9.4'
-$GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws || $GITSUDO bundle install --deployment --without development test postgres aws
+for i in 1 2 3; do
+  $GITSUDO bundle install --deployment --without development test postgres aws && break
+done
 $GITSUDO sed -i -e "s,source \"$RUBYGEMS_SOURCE\",source \"https://rubygems.org\"," Gemfile
 
 # initialize database and advanced features
