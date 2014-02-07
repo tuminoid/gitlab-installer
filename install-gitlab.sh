@@ -119,7 +119,7 @@ $GITSUDO git checkout $TARGET_VERSION
 $GITSUDO cp config/gitlab.yml.example config/gitlab.yml
 $GITSUDO sed -i "s,host: localhost,host: $GITLAB_SERVER," config/gitlab.yml
 $GITSUDO sed -i "s,email_from: gitlab@localhost,email_from: $GITLAB_EMAIL," config/gitlab.yml
-$GITSUDO sed -i "s,support_email: gitlab@localhost,support_email: $GITLAB_SUPPORT_EMAIL," config/gitlab.yml
+$GITSUDO sed -i "s,support_email: support@localhost,support_email: $GITLAB_SUPPORT_EMAIL," config/gitlab.yml
 $GITSUDO sed -i "s,# user: git,user: $GITLAB_USER," config/gitlab.yml
 
 chown -R $GITLAB_USER log/
