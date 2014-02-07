@@ -4,6 +4,8 @@
 # Mandatory settings here, please customize
 # -----------------------------------------
 
+# Gitlab version to install
+TARGET_VERSION="v6.5.1"
 
 # MySQL root password (will be used, not written)
 MYSQL_ROOT_PASSWORD="mysqlpass"
@@ -118,7 +120,7 @@ EOF
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlabhq.git gitlab
 cd $GITHOME/gitlab
-$GITSUDO git checkout v6.4.3
+$GITSUDO git checkout $TARGET_VERSION
 $GITSUDO cp config/gitlab.yml.example config/gitlab.yml
 $GITSUDO sed -i "s,host: localhost,host: $GITLAB_SERVER," config/gitlab.yml
 $GITSUDO sed -i "s,email_from: gitlab@localhost,email_from: $GITLAB_EMAIL," config/gitlab.yml
@@ -184,4 +186,4 @@ service gitlab start
 $GITSUDO bundle exec rake gitlab:check RAILS_ENV=production
 
 # done
-echo "Victory! Running GitLab 6.4.3!"
+echo "Victory! Running GitLab $TARGET_VERSION!"
