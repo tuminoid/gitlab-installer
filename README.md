@@ -8,11 +8,6 @@ Installation follows https://github.com/gitlabhq/gitlabhq/blob/master/doc/instal
 
 Installation defaults to using MySQL and installing git and ruby 2.0 from PPAs.
 
-Upgrades
-========
-
-Check the `upgrades` directory for upgrade scripts from version to another.
-
 Releases
 ========
 
