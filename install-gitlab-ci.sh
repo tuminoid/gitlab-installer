@@ -74,7 +74,9 @@ apt-get -y install curl build-essential checkinstall openssh-server git postfix 
   ruby2.0 ruby2.0-dev
 
 # HACK: try three times, ssl has issues from time to time
-gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc || gem install bundler --no-ri --no-rdoc
+for i in 1 2 3; do
+  gem install bundler --no-ri --no-rdoc && break
+done
 
 # install system user
 adduser --disabled-login --gecos 'GitLab CI' $GITLABCI_USER
@@ -121,11 +123,12 @@ $CISUDO mkdir -p tmp/pids/ tmp/sockets/
 chmod -R u+rwX  tmp/pids/
 chmod -R u+rwX  tmp/sockets/
 
-# install more gems
 # there is issues with rubygems ssl certs, thus we change the source, see config in the beginning
 cd $CIHOME/gitlab-ci
 $CISUDO sed -i -e "s,source 'https://rubygems.org',source '$RUBYGEMS_SOURCE'," Gemfile
-$CISUDO bundle install --deployment --without development test postgres
+for i in 1 2 3; do
+  $CISUDO bundle install --deployment --without development test postgres && break
+done
 $CISUDO sed -i -e "s,source '$RUBYGEMS_SOURCE',source 'https://rubygems.org'," Gemfile
 
 # initialize database and advanced features
