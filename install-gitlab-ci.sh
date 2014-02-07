@@ -66,8 +66,8 @@ apt-get -y install sudo nano debconf-utils python-software-properties
 apt-add-repository -y ppa:git-core/ppa
 # we also need ruby 2.0
 add-apt-repository -y ppa:brightbox/ruby-ng-experimental
-# update
 apt-get -y update
+apt-get -y upgrade
 
 # install dependencies
 apt-get -y install wget curl gcc checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev \
