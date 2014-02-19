@@ -6,16 +6,14 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define :gitlab do |config|
-    # As default, only expose port 80 for GitLab
+    # Comment out if you only want CI
+    config.vm.provision :shell, :path => "install-gitlab.sh"
+    # Expose port 80 for Gitlab, use 443 if you manually configure SSL too
     config.vm.network :forwarded_port, guest: 80, host: 80
-
-    # Uncomment if you use SSL
     # config.vm.network :forwarded_port, guest: 443, host: 443
 
-    config.vm.provision :shell, :path => "install-gitlab.sh"
-
-    # Uncomment these if you want CI too
-    config.vm.provision :shell, :path => "install-gitlab-ci.sh"
+    # Uncomment these if you want Gitlab CI
+    # config.vm.provision :shell, :path => "install-gitlab-ci.sh"
     # config.vm.network :forwarded_port, guest: 3000, host: 3000
 
     # CI Runner cannot be automated in a full install as it needs a token from CI
