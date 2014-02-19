@@ -35,8 +35,8 @@ RUBYGEMS_SOURCE="http://rubygems.org"
 POSTFIX_HOSTNAME="precise64"
 
 # Worker processes
-WORKER_PROCESSES=4
-
+UNICORN_WORKERS=4
+UNICORN_TIMEOUT=180
 
 
 
@@ -136,7 +136,8 @@ $GITSUDO mkdir -p public/uploads
 chmod -R u+rwX  public/uploads
 
 $GITSUDO cp config/unicorn.rb.example config/unicorn.rb
-$GITSUDO sed -i "s,worker_processes 2,worker_processes $WORKER_PROCESSES," config/unicorn.rb
+$GITSUDO sed -i "s,worker_processes 2,worker_processes $UNICORN_WORKERS," config/unicorn.rb
+$GITSUDO sed -i "s,timeout 30,timeout $UNICORN_TIMEOUT," config/unicorn.rb
 
 # configure gitlab db
 $GITSUDO cp config/database.yml.mysql config/database.yml
