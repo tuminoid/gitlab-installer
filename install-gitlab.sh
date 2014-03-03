@@ -75,6 +75,7 @@ echo "postfix postfix/mailname string $POSTFIX_HOSTNAME" | debconf-set-selection
 apt-get install -y curl git-core openssh-server redis-server checkinstall logrotate postfix \
   build-essential libicu-dev libxml2-dev libxslt-dev \
   ruby2.0 ruby2.0-dev
+update-alternatives --set ruby /usr/bin/ruby2.0
 
 # HACK: try three times, ssl has issues from time to time
 for i in 1 2 3; do
