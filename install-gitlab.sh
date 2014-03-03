@@ -5,7 +5,8 @@
 # -----------------------------------------
 
 # Gitlab version to install
-TARGET_VERSION="v6.5.1"
+TARGET_VERSION="v6.6.4"
+SHELL_VERSION="v1.8.0"
 
 # MySQL root password (will be used, not written)
 MYSQL_ROOT_PASSWORD="mysqlpass"
@@ -93,7 +94,7 @@ $GITSUDO git config --global core.autocrlf input
 cd $GITHOME
 $GITSUDO git clone https://github.com/gitlabhq/gitlab-shell.git
 cd gitlab-shell
-$GITSUDO git checkout v1.8.0
+$GITSUDO git checkout $SHELL_VERSION
 $GITSUDO cp config.yml.example config.yml
 $GITSUDO sed -i "s,gitlab_url: \"http://localhost/\",gitlab_url: \"http://$GITLAB_SERVER/\"," config.yml
 $GITSUDO sed -i "s,\"/home/git/,\"$GITHOME/,g" config.yml
