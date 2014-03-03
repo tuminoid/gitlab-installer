@@ -72,6 +72,7 @@ apt-get -y upgrade
 # install dependencies
 apt-get -y install curl build-essential checkinstall openssh-server git postfix redis-server logrotate \
   ruby2.0 ruby2.0-dev
+update-alternatives --set ruby /usr/bin/ruby2.0
 
 # HACK: try three times, ssl has issues from time to time
 for i in 1 2 3; do
