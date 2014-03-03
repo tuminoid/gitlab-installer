@@ -65,6 +65,7 @@ apt-get -y install wget curl gcc libxml2-dev libxslt-dev libcurl4-openssl-dev \
   libreadline6-dev libc6-dev libssl-dev make build-essential zlib1g-dev \
   openssh-server git-core libyaml-dev postfix libpq-dev libicu-dev \
   ruby2.0 ruby2.0-dev ruby2.0-doc
+update-alternatives --set ruby /usr/bin/ruby2.0
 
 # install system user
 adduser --disabled-login --gecos 'GitLab CI Runner' $CIR_USER
