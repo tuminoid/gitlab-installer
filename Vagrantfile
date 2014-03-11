@@ -6,6 +6,9 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define :gitlab do |config|
+    # Vagrant 1.5 type box
+    config.vm.box = "hashicorp/precise64"
+
     # Comment out if you only want CI
     config.vm.provision :shell, :path => "install-gitlab.sh"
     # Expose port 80 for Gitlab, use 443 if you manually configure SSL too
@@ -24,15 +27,11 @@ Vagrant.configure("2") do |config|
 
   # GitLab recommended specs
   config.vm.provider "virtualbox" do |v, override|
-    override.vm.box = "precise64"
-    override.vm.box_url = "http://files.vagrantup.com/precise64.box"
     v.customize [ "modifyvm", :id, "--cpus", "2" ]
     v.customize [ "modifyvm", :id, "--memory", "1536" ]
   end
 
   config.vm.provider "vmware_fusion" do |v, override|
-    override.vm.box = "precise64_fusion"
-    override.vm.box_url = "http://files.vagrantup.com/precise64_vmware.box"
     v.vmx["numvcpus"] = "2"
     v.vmx["memsize"] = "1536"
   end
