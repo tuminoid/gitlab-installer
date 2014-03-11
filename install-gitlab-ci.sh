@@ -6,7 +6,7 @@
 
 
 # CI version to install (git tag/branch)
-TARGET_VERSION="v4.2.2"
+TARGET_VERSION="v4.3.0"
 
 # MySQL root password (will be used, not written)
 MYSQL_ROOT_PASSWORD="mysqlpass"
@@ -15,10 +15,11 @@ MYSQL_ROOT_PASSWORD="mysqlpass"
 MYSQL_GITLABCI_PASSWORD="gitlabcipass"
 
 # Gitlab address
-GITLABCI_GITLAB_SERVER="http://127.0.0.1"
+GITLAB_SERVER="http://127.0.0.1"
 
 # email
-GITLABCI_EMAIL="no-reply@gitlabci.invalid"
+GITLABCI_EMAIL="gitlab-ci@example.invalid"
+GITLABCI_SUPPORT_EMAIL="support@example.invalid"
 
 # Nginx server FQDN
 SERVERCI_NGINX_FQDN="127.0.0.1"
@@ -29,7 +30,6 @@ SERVERCI_NGINX_PORT="3000"
 # If CI is on a stand-alone server, use this instead
 # SERVERCI_NGINX_PORT="*:80 default_server"
 
-
 # ---------------------------------------------
 # Below this point it is optional congifuration
 # Defaults work just fine
@@ -38,7 +38,9 @@ SERVERCI_NGINX_PORT="3000"
 # Rubygems server
 RUBYGEMS_SOURCE="http://rubygems.org"
 
-
+# worker processes
+UNICORN_WORKERS=2
+UNICORN_TIMEOUT=180
 
 
 
@@ -107,11 +109,15 @@ $CISUDO git checkout $TARGET_VERSION
 
 # configure ci
 $CISUDO cp config/application.yml.example config/application.yml
-$CISUDO sed -i "s,- 'https://dev.gitlab.org/',- '$GITLABCI_GITLAB_SERVER'," config/application.yml
-$CISUDO sed -i '/staging.gitlab.org/d' config/application.yml
+$CISUDO sed -i "s,- 'https://gitlab.example.com/',- '$GITLAB_SERVER'," config/application.yml
+$GITSUDO sed -i "s,email_from: gitlab-ci@localhost,email_from: $GITLAB_EMAIL," config/application.yml
+$GITSUDO sed -i "s,support_email: support@localhost,support_email: $GITLAB_SUPPORT_EMAIL," config/application.yml
 
 # configure puma
-$CISUDO cp config/puma.rb.example config/puma.rb
+$CISUDO cp config/unicorn.rb.example config/unicorn.rb
+$CISUDO sed -i "s,worker_processes 2,worker_processes $UNICORN_WORKERS," config/unicorn.rb
+$CISUDO sed -i "s,timeout 30,timeout $UNICORN_TIMEOUT," config/unicorn.rb
+$CISUDO sed -i "s#listen \"127.0.0.1:8080\",#listen \"127.0.0.1:8081\",#" config/unicorn.rb
 
 # configure db
 $CISUDO cp config/database.yml.mysql config/database.yml
