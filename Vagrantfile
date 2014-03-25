@@ -28,11 +28,11 @@ Vagrant.configure("2") do |config|
   # GitLab recommended specs
   config.vm.provider "virtualbox" do |v, override|
     v.customize [ "modifyvm", :id, "--cpus", "2" ]
-    v.customize [ "modifyvm", :id, "--memory", "1536" ]
+    v.customize [ "modifyvm", :id, "--memory", "2048" ]
   end
 
   config.vm.provider "vmware_fusion" do |v, override|
     v.vmx["numvcpus"] = "2"
-    v.vmx["memsize"] = "1536"
+    v.vmx["memsize"] = "2048"
   end
 end
