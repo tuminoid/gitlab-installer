@@ -8,6 +8,7 @@ Vagrant.configure("2") do |config|
   config.vm.define :gitlab do |config|
     # Vagrant 1.5 type box
     config.vm.box = "hashicorp/precise64"
+    # config.vm.box = "chef/ubuntu-14.04"
 
     # Comment out if you only want CI
     config.vm.provision :shell, :path => "install-gitlab.sh"

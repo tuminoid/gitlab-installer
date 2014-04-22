@@ -56,10 +56,13 @@ GITLAB_USER="git"
 GITSUDO="sudo -u $GITLAB_USER -H"
 GITHOME="/home/$GITLAB_USER"
 
-# make sure we have sudo and editor, python-software-properties for apt-add-repository
+# make sure we have sudo and editor, software-properties-common for apt-add-repository
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
-apt-get -y install sudo nano debconf-utils python-software-properties
+apt-get -y install sudo nano debconf-utils software-properties-common
+# 12.04 has python-software-properties for add-apt-repository,
+# which 14.04 handles with software-properties-common
+apt-get -y install python-software-properties || true
 
 # we need newer git than 1.7.9.5 in 12.04.2 LTS, so git-core ppa needs to be added
 apt-add-repository -y ppa:git-core/ppa
