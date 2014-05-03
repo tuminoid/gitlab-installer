@@ -5,8 +5,8 @@
 # -----------------------------------------
 
 # Gitlab version to install
-TARGET_VERSION="v6.7.5"
-SHELL_VERSION="v1.9.1"
+TARGET_VERSION="v6.8.1"
+SHELL_VERSION="v1.9.3"
 
 # MySQL root password (will be used, not written)
 MYSQL_ROOT_PASSWORD="mysqlpass"
