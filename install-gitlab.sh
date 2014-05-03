@@ -133,6 +133,7 @@ chmod -R u+rwX  log/
 chmod -R u+rwX  tmp/
 
 $GITSUDO mkdir $GITHOME/gitlab-satellites
+chmod u+rwx,g+rx,o-rwx /home/git/gitlab-satellites
 $GITSUDO mkdir -p tmp/pids/ tmp/sockets/
 chmod -R u+rwX  tmp/pids/
 chmod -R u+rwX  tmp/sockets/
