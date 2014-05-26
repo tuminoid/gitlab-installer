@@ -6,7 +6,7 @@
 
 
 # CI version to install (git tag/branch)
-TARGET_VERSION="v4.3.0"
+TARGET_VERSION="v5.0.1"
 
 # MySQL root password (will be used, not written)
 MYSQL_ROOT_PASSWORD="mysqlpass"
