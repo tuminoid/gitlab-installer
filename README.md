@@ -12,3 +12,11 @@ Releases
 ========
 
 Check tags for releases matching GitLab releases.
+
+
+Gitlab CI
+=========
+
+Gitlab CI and Gitlab CI Runner scripts were split into separate repository. You can find them at:
+https://github.com/tuminoid/gitlabci-installer
+
