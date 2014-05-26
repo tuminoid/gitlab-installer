@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
     # Comment out if you only want CI
     config.vm.provision :shell, :path => "install-gitlab.sh"
     # Expose port 80 for Gitlab, use 443 if you manually configure SSL too
+    # On Linux, you need to use 8080 or some other port and have nginx proxy 80 to that port
     config.vm.network :forwarded_port, guest: 80, host: 80
     # config.vm.network :forwarded_port, guest: 443, host: 443
 
