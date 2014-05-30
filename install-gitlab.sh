@@ -5,7 +5,7 @@
 # -----------------------------------------
 
 # Gitlab version to install
-TARGET_VERSION="v6.9.0"
+TARGET_VERSION="v6.9.2"
 SHELL_VERSION="v1.9.4"
 
 # MySQL root password (will be used, not written)
