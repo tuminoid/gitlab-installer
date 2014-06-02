@@ -30,7 +30,7 @@ SERVER_NGINX_NAME="gitlab"
 # ---------------------------------------------
 
 # Rubygems server
-RUBYGEMS_SOURCE="http://rubygems.org"
+RUBYGEMS_SOURCE="https://rubygems.org"
 
 # Postfix hostname
 POSTFIX_HOSTNAME="precise64"
@@ -90,7 +90,7 @@ done
 adduser --disabled-login --gecos 'GitLab' $GITLAB_USER
 cd $GITHOME
 $GITSUDO git config --global user.name "GitLab"
-$GITSUDO git config --global user.email $GITLAB_EMAIL
+$GITSUDO git config --global user.email "$GITLAB_EMAIL"
 $GITSUDO git config --global core.autocrlf input
 
 # install gitlab shell
@@ -167,6 +167,9 @@ $GITSUDO sed -i -e "s,source \"$RUBYGEMS_SOURCE\",source \"https://rubygems.org\
 
 # initialize database and advanced features
 echo "yes" | $GITSUDO bundle exec rake gitlab:setup RAILS_ENV=production
+
+# precompile assets
+$GITSUDO bundle exec rake assets:clean assets:precompile cache:clear RAILS_ENV=production
 
 # install init script to start gitlab at boot
 cp lib/support/init.d/gitlab /etc/init.d/gitlab
