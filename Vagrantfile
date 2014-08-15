@@ -1,21 +1,27 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# Author: Tuomo Tanskanen <tuomo@tanskanen.org>
 
-# Author: Tuomo Tanskanen <tumi@tumi.fi>
+Vagrant.require_version ">= 1.5.0"
 
 Vagrant.configure("2") do |config|
 
   config.vm.define :gitlab do |config|
-    # Vagrant 1.5 type box
+    # Configure some hostname here
+    # config.vm.hostname = "gitlab.invalid"
     config.vm.box = "hashicorp/precise64"
-    # config.vm.box = "chef/ubuntu-14.04"
-
-    # Comment out if you only want CI
     config.vm.provision :shell, :path => "install-gitlab.sh"
-    # Expose port 80 for Gitlab, use 443 if you manually configure SSL too
-    # On Linux, you need to use 8080 or some other port and have nginx proxy 80 to that port
+
+    # On Linux, we cannot forward ports <1024
+    # We need to use 8080 or some other port and have nginx proxy 80 to that port
+    # or access the site via hostname:<port>, in this case 127.0.0.1:8443
     config.vm.network :forwarded_port, guest: 80, host: 8080
-    # config.vm.network :forwarded_port, guest: 443, host: 443
+    config.vm.network :forwarded_port, guest: 443, host: 8443
+  end
+
+  # cache the 200M omnibus package
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.enable :generic, { :cache_dir => "/var/cache/generic" }
   end
 
   # GitLab recommended specs
