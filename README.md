@@ -3,10 +3,9 @@ gitlab-installer
 
 Easy Gitlab installer, targeting Ubuntu 12.04 LTS, on Vagrant or on metal.
 
-You can run this installer with Vagrant or on live Ubuntu system (preferably empty).
-Installation follows https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/installation.md very closely.
-
-Installation defaults to using MySQL and installing git and ruby 2.0 from PPAs.
+From Gitlab version 7.1.1 onwards, it utilizes the omnibus package instead of executing
+long setup scripts. If you wish to use setup scripts or Puppet/Chef, there are plenty of
+other choises.
 
 Releases
 ========
