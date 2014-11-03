@@ -76,6 +76,7 @@ DOWNLOAD="$DEB_URL/$DEB"
 [ "$(whoami)" != "root" ] && echo "error: need to be root" && exit 1
 
 # download omnibus-gitlab package (200M) and cache it
+echo "Downloading Gitlab package from $DOWNLOAD ..."
 (mkdir -p $CACHE && cd $CACHE && wget -nc -q $DOWNLOAD)
 
 # install tools to automate this install
