@@ -2,7 +2,7 @@
 # Author: Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # Gitlab version to install
-DEB="gitlab_7.1.1-omnibus.1-1_amd64.deb"
+DEB="gitlab_7.4.3-omnibus.1-1_amd64.deb"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-12.04"
 GITLAB_HOSTNAME="gitlab.invalid"
 
