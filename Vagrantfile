@@ -34,4 +34,8 @@ Vagrant.configure("2") do |config|
     v.vmx["numvcpus"] = "2"
     v.vmx["memsize"] = "2048"
   end
+
+  config.vm.provider "lxc" do |v, override|
+    override.vm.box = "fgrehm/precise64-lxc"
+  end
 end
