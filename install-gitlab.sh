@@ -1,9 +1,9 @@
 #!/bin/bash -e
-# Author: Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # Gitlab version to install
 DEB="gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb"
-DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-12.04"
+DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 GITLAB_HOSTNAME="gitlab.invalid"
 
 #
@@ -20,13 +20,22 @@ read -d '' CONFIG <<"EOF" || true
 
 # if https
 external_url 'https://gitlab.invalid/'
-nginx['redirect_http_to_https'] = true
 nginx['ssl_certificate'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 
+# unless you have separate dns for ci, don't enable this
+# nginx['redirect_http_to_https'] = true
+
+# do you want to enable gitlab-ci? uncomment this
+# you also need to configure some runners, which are 
+# not included in omnibus package and require manual
+# setup anyways
+ci_external_url 'http://gitlabci.invalid/'
+
+#
 # These settings are documented in more detail at
 # https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
-
+#
 gitlab_rails['ldap_enabled'] = false
 gitlab_rails['ldap_host'] = 'ldap.invalid'
 gitlab_rails['ldap_port'] = 636
@@ -76,7 +85,7 @@ DOWNLOAD="$DEB_URL/$DEB"
 [ "$(whoami)" != "root" ] && echo "error: need to be root" && exit 1
 
 # download omnibus-gitlab package (200M) and cache it
-echo "Downloading Gitlab package from $DOWNLOAD ..."
+echo "Downloading Gitlab package from $DOWNLOAD. This may take a while ..."
 (mkdir -p $CACHE && cd $CACHE && wget -nc -q $DOWNLOAD)
 
 # install tools to automate this install
