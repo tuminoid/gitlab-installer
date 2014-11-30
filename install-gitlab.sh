@@ -2,7 +2,8 @@
 # Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # Gitlab version to install
-DEB="gitlab_7.5.2-omnibus.5.2.1.ci-1_amd64.deb"
+DEB="gitlab_7.5.3-omnibus.5.2.1.ci-1_amd64.deb"
+DEB_MD5="96f087fb1960c89775c33f310aa3fffd"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 GITLAB_HOSTNAME="gitlab.invalid"
 
@@ -20,14 +21,12 @@ read -d '' CONFIG <<"EOF" || true
 
 # if https
 external_url 'https://gitlab.invalid/'
+nginx['redirect_http_to_https'] = true
 nginx['ssl_certificate'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 
-# unless you have separate dns for ci, don't enable this
-# nginx['redirect_http_to_https'] = true
-
 # do you want to enable gitlab-ci? uncomment this
-# you also need to configure some runners, which are 
+# you also need to configure some runners, which are
 # not included in omnibus package and require manual
 # setup anyways
 ci_external_url 'http://gitlabci.invalid/'
@@ -84,13 +83,27 @@ DOWNLOAD="$DEB_URL/$DEB"
 # All commands expect root access.
 [ "$(whoami)" != "root" ] && echo "error: need to be root" && exit 1
 
-# download omnibus-gitlab package (200M) and cache it
-echo "Downloading Gitlab package from $DOWNLOAD. This may take a while ..."
-(mkdir -p $CACHE && cd $CACHE && wget -nc -q $DOWNLOAD)
-
 # install tools to automate this install
 apt-get -y update
 apt-get -y install debconf-utils
+
+# download omnibus-gitlab package (250M) and cache it
+echo "Downloading Gitlab package. This may take a while ..."
+{
+mkdir -p "$CACHE" && cd "$CACHE"
+if [[ -e "$DEB" ]] && [[ $(md5sum $DEB | cut -f1 -d " ") = $DEB_MD5 ]]; then
+  echo "Package found in cache."
+else
+  echo "Package does not match hash, re-downloading."
+  rm "$DEB"
+  echo "executing: wget -nc -q $DOWNLOAD"
+fi
+wget -nc -q $DOWNLOAD
+if [[ $(md5sum $DEB | cut -f1 -d " ") != $DEB_MD5 ]]; then
+  echo "error: Package does still not match hash!"
+  exit 1
+fi
+}
 
 # install the few dependencies we have
 echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
