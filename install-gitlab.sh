@@ -2,7 +2,7 @@
 # Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # Gitlab version to install
-DEB="gitlab_7.5.1-omnibus.5.2.0.ci-1_amd64.deb"
+DEB="gitlab_7.5.2-omnibus.5.2.1.ci-1_amd64.deb"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 GITLAB_HOSTNAME="gitlab.invalid"
 
