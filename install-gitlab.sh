@@ -1,5 +1,7 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 # Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
+
+set -e
 
 # Gitlab version to install
 DEB="gitlab_7.5.3-omnibus.5.2.1.ci-1_amd64.deb"
