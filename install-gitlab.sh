@@ -29,40 +29,48 @@ export DEBIAN_FRONTEND=noninteractive
 CACHE=/var/cache/generic
 DOWNLOAD="$DEB_URL/$DEB"
 
+check_for_root()
+{
+  [[ $EUID = 0 ]] || { echo "error: need to be root" && exit 1; }
+}
+
+download_package()
+{
+  mkdir -p "$CACHE" && cd "$CACHE"
+  if [[ -e "$DEB" ]] && [[ $(md5sum "$DEB" | cut -f1 -d " ") = $DEB_MD5 ]]; then
+    echo "Package has been downloaded previously, using cached binary."
+  else
+    [[ -e "$DEB" ]] && rm -f "$DEB" && echo "Package hash does not match, re-downloading."
+    echo "Executing: wget -nc -q $DOWNLOAD"
+  fi
+
+  wget -nc -q $DOWNLOAD
+  if [[ $(md5sum $DEB | cut -f1 -d " ") != $DEB_MD5 ]]; then
+    echo "error: Package hash is still not valid, exiting ..."
+    exit 1
+  fi
+}
+
 # All commands expect root access.
-[ "$(whoami)" != "root" ] && echo "error: need to be root" && exit 1
+check_for_root
 
 # install tools to automate this install
 apt-get -y update
-apt-get -y install debconf-utils
-
-# download omnibus-gitlab package (250M) and cache it
-echo "Downloading Gitlab package. This may take a while ..."
-{
-mkdir -p "$CACHE" && cd "$CACHE"
-if [[ -e "$DEB" ]] && [[ $(md5sum $DEB | cut -f1 -d " ") = $DEB_MD5 ]]; then
-  echo "Package found in cache."
-else
-  echo "Package does not match hash, re-downloading."
-  rm "$DEB"
-  echo "executing: wget -nc -q $DOWNLOAD"
-fi
-wget -nc -q $DOWNLOAD
-if [[ $(md5sum $DEB | cut -f1 -d " ") != $DEB_MD5 ]]; then
-  echo "error: Package does still not match hash!"
-  exit 1
-fi
-}
+apt-get -y install debconf-utils wget
 
 # install the few dependencies we have
 echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
 echo "postfix postfix/mailname string $GITLAB_HOSTNAME" | debconf-set-selections
 apt-get -y install openssh-server postfix
-dpkg -i $CACHE/$DEB
 
 # generate ssl keys
 apt-get -y install ssl-cert
 make-ssl-cert generate-default-snakeoil --force-overwrite
+
+# download omnibus-gitlab package (250M) and cache it
+echo "Downloading Gitlab package. This may take a while ..."
+download_package
+dpkg -i $CACHE/$DEB
 
 # fix the config and reconfigure
 cp /vagrant/gitlab.rb /etc/gitlab/gitlab.rb
