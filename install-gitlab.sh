@@ -4,8 +4,8 @@
 set -e
 
 # Gitlab version to install
-DEB="gitlab_7.6.2-omnibus.5.3.0.ci-1_amd64.deb"
-DEB_MD5="50a10fa70cd1903b5390fd62767ff10b"
+DEB="gitlab_7.7.1-omnibus.5.4.1.ci-1_amd64.deb"
+DEB_MD5="5d9cd9d1945b8230088a384d33c92c0b"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 
 # This is for postfix
