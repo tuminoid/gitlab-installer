@@ -4,8 +4,8 @@
 set -e
 
 # Gitlab version to install
-DEB="gitlab_7.7.1-omnibus.5.4.1.ci-1_amd64.deb"
-DEB_MD5="5d9cd9d1945b8230088a384d33c92c0b"
+DEB="gitlab_7.8.1-omnibus-1_amd64.deb"
+DEB_MD5="f07883bd755921f28c916897addb274b"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 
 # This is for postfix
@@ -79,4 +79,4 @@ gitlab-ctl reconfigure
 # done
 echo "Done!"
 echo " Login at your host:port with 'root' + '5iveL!fe'"
-echo " Config found at /etc/gitlab/gitlab.rb and updated by 'gitlab-ctl reconfigure'"
+echo " Config found at /etc/gitlab/gitlab.rb and updated by 'sudo gitlab-ctl reconfigure'"
