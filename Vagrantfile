@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-# Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright 2013, 2014, 2015 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 Vagrant.require_version ">= 1.5.0"
 
