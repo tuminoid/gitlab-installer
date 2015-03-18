@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2013-2014 Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright 2013, 2014, 2015 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 set -e
 
