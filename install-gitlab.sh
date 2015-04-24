@@ -4,8 +4,8 @@
 set -e
 
 # Gitlab version to install
-DEB="gitlab_7.9.2-omnibus-1_amd64.deb"
-DEB_MD5="ce58f147ffc155f8ac1be54eab38103b"
+DEB="gitlab-ce_7.10.0~omnibus.2-1_amd64.deb"
+DEB_MD5="7e55b5d47937b9d8cef64475bf0fcb5a"
 DEB_URL="https://downloads-packages.s3.amazonaws.com/ubuntu-14.04"
 
 # This is for postfix
@@ -68,7 +68,7 @@ apt-get -y install ssl-cert
 make-ssl-cert generate-default-snakeoil --force-overwrite
 
 # download omnibus-gitlab package (250M) and cache it
-echo "Downloading Gitlab package. This may take a while ..."
+echo "Downloading Gitlab package (over 200 megabytes). This may take a while ..."
 download_package
 dpkg -i $CACHE/$DEB
 
