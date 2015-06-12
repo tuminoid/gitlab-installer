@@ -12,7 +12,7 @@ GITLAB_HOSTNAME="gitlab.invalid"
 #
 # Use provided gitlab.rb.example as base
 #
-[ ! -e /vagrant/gitlab.rb ] && { echo "error: gitlab.rb missing"; exit 1; }
+[ ! -e /vagrant/gitlab.rb.example ] && { echo "error: gitlab.rb missing"; exit 1; }
 
 
 #
