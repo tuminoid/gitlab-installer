@@ -21,11 +21,6 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 80, host: 8081
   end
 
-  # cache the 200M omnibus package
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.enable :generic, { :cache_dir => "/var/cache/generic" }
-  end
-
   # GitLab recommended specs
   config.vm.provider "virtualbox" do |v, override|
     v.customize [ "modifyvm", :id, "--cpus", "2" ]
