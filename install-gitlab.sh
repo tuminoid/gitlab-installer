@@ -22,8 +22,6 @@ GITLAB_HOSTNAME="gitlab.invalid"
 #
 
 export DEBIAN_FRONTEND=noninteractive
-CACHE=/var/cache/generic
-DOWNLOAD="$DEB_URL/$DEB"
 
 check_for_root()
 {
