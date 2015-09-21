@@ -8,8 +8,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define :gitlab do |config|
     # Configure some hostname here
-    # config.vm.hostname = "gitlab.invalid"
-    config.vm.box = "chef/ubuntu-14.04"
+    config.vm.hostname = "gitlab.invalid"
+    config.vm.box = "ubuntu/trusty64"
     config.vm.provision :shell, :path => "install-gitlab.sh"
 
     # On Linux, we cannot forward ports <1024
