@@ -8,14 +8,6 @@ nginx['redirect_http_to_https'] = true
 nginx['ssl_certificate'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 
-# do you want to enable gitlab-ci? uncomment this
-# you also need to configure some runners, which are
-# not included in omnibus package and require manual
-# setup anyways
-# also if ci is at same ip, disable redirect
-ci_external_url 'http://gitlabci.invalid/'
-nginx['redirect_http_to_https'] = false
-
 #
 # These settings are documented in more detail at
 # https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
