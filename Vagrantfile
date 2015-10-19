@@ -27,6 +27,12 @@ Vagrant.configure("2") do |config|
     v.memory = 2048
   end
 
+  config.vm.provider "vmware_fusion" do |v, override|
+    v.vmx["memsize"] = "2048"
+    v.vmx["numvcpus"] = "2"
+    override.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+  end
+
   config.vm.provider "lxc" do |v, override|
     override.vm.box = "fgrehm/trusty64-lxc"
   end
