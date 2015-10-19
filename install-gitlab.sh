@@ -11,10 +11,6 @@ GITLAB_FLAVOR="gitlab-ce"
 # This is for postfix
 GITLAB_HOSTNAME="gitlab.invalid"
 
-#
-# Use provided gitlab.rb.example as base
-#
-[ ! -e /vagrant/gitlab.rb ] && { echo "error: gitlab.rb missing"; exit 1; }
 
 
 #
@@ -25,13 +21,44 @@ GITLAB_HOSTNAME="gitlab.invalid"
 
 export DEBIAN_FRONTEND=noninteractive
 
+fatal()
+{
+    echo "fatal: $@" >&2
+}
+
 check_for_root()
 {
-  [[ $EUID = 0 ]] || { echo "error: need to be root" && exit 1; }
+    if [[ $EUID != 0 ]]; then
+        fatal "need to be root"
+        exit 1
+    fi
 }
+
+check_for_gitlab_rb()
+{
+    if [[ ! -e /vagrant/gitlab.rb ]]; then
+        fatal "gitlab.rb not found at /vagrant"
+        exit 1
+    fi
+}
+
+check_for_backwards_compatibility()
+{
+    if egrep -q "^ci_external_url" /vagrant/gitlab.rb; then
+        fatal "ci_external_url setting detected in 'gitlab.rb'"
+        fatal "This setting is deprecated in Gitlab 8.0+, and will cause Chef to fail."
+        fatal "Check the 'gitlab.rb.example' for fresh set of settings."
+        exit 1
+    fi
+}
+
 
 # All commands expect root access.
 check_for_root
+
+# Check for configs that are not compatible anymore
+check_for_gitlab_rb
+check_for_backwards_compatibility
 
 # install tools to automate this install
 apt-get -y update
