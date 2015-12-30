@@ -31,6 +31,12 @@ Vagrant.configure("2") do |config|
     override.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
   end
 
+  config.vm.provider "parallels" do |v, override|
+    v.cpus = 2
+    v.memory = 2048
+    override.vm.box = "parallels/ubuntu-14.04"
+  end
+
   config.vm.provider "lxc" do |v, override|
     override.vm.box = "fgrehm/trusty64-lxc"
   end
