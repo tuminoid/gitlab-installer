@@ -52,6 +52,11 @@ check_for_backwards_compatibility()
     fi
 }
 
+set_apt_pdiff_off()
+{
+    echo 'Acquire::PDiffs "false";' > /etc/apt/apt.conf.d/85pdiff-off
+}
+
 
 # All commands expect root access.
 check_for_root
@@ -75,6 +80,7 @@ make-ssl-cert generate-default-snakeoil --force-overwrite
 
 # download omnibus-gitlab package (250M) and cache it
 echo "Setting up Gitlab deb repository ..."
+set_apt_pdiff_off
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
 echo "Installing $GITLAB_FLAVOR via apt ..."
 apt-get install -y $GITLAB_FLAVOR
