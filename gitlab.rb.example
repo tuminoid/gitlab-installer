@@ -13,14 +13,24 @@ nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 # https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/gitlab.yml.example#L118
 #
 gitlab_rails['ldap_enabled'] = false
-gitlab_rails['ldap_host'] = 'ldap.invalid'
-gitlab_rails['ldap_port'] = 636
-gitlab_rails['ldap_uid'] = 'uid'
-gitlab_rails['ldap_method'] = 'ssl'
-gitlab_rails['ldap_bind_dn'] = 'bind_user'
-gitlab_rails['ldap_password'] = 'user_password'
-gitlab_rails['ldap_allow_username_or_email_login'] = true
-gitlab_rails['ldap_base'] = 'ldap_base'
+gitlab_rails['ldap_servers'] = YAML.load <<-EOS
+  ldap:
+    enabled: false
+    host: 'ldap.host.here'
+    port: 389
+    uid: 'sAMAccountName'
+    method: 'tls' # 'tls' or 'plain' or 'ssl'
+    bind_dn: 'bind.user.here'
+    password: 'bind.pass.here'
+    active_directory: false
+    allow_username_or_email_login: false
+    base: 'bind.base.here'
+    user_filter: 
+    attributes:
+        username: [ 'sAMAccountName' ]
+        email: [ 'mail', 'userPrincipalName' ]
+        name: [ 'displayName' ]
+EOS
 
 # might want to disable this if ldap enabled
 gitlab_rails['gitlab_signup_enabled'] = true
