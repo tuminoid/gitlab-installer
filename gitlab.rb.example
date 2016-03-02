@@ -14,8 +14,7 @@ nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
 #
 gitlab_rails['ldap_enabled'] = false
 gitlab_rails['ldap_servers'] = YAML.load <<-EOS
-  ldap:
-    enabled: false
+  main:
     host: 'ldap.host.here'
     port: 389
     uid: 'sAMAccountName'
