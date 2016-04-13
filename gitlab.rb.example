@@ -24,7 +24,7 @@ gitlab_rails['ldap_servers'] = YAML.load <<-EOS
     active_directory: false
     allow_username_or_email_login: false
     base: 'bind.base.here'
-    user_filter: 
+    user_filter:
     attributes:
         username: [ 'sAMAccountName' ]
         email: [ 'mail', 'userPrincipalName' ]
@@ -36,7 +36,13 @@ gitlab_rails['gitlab_signup_enabled'] = true
 gitlab_rails['gitlab_signin_enabled'] = true
 
 # limit the projects
+gitlab_rails['gitlab_default_can_create_group'] = true
 gitlab_rails['gitlab_default_projects_limit'] = 100
+gitlab_rails['gitlab_default_projects_features_issues'] = true
+gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
+gitlab_rails['gitlab_default_projects_features_wiki'] = true
+gitlab_rails['gitlab_default_projects_features_snippets'] = true
+gitlab_rails['gitlab_default_projects_features_builds'] = true
 
 # keep backup for about 4 weeks
 gitlab_rails['backup_keep_time'] = 2404800
