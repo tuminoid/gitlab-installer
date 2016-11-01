@@ -5,9 +5,11 @@ Easy Gitlab installer, targeting Ubuntu 14.04 LTS, on Vagrant or on metal.
 
 Supported Vagrant providers:
  * Virtualbox
- * VMWare
  * Parallels
  * LXC
+
+Untested Vagrant providers (worked with 14.04 LTS):
+ * VMWare
 
 Usage
 =====
@@ -32,6 +34,10 @@ other choises.
 
 From Gitlab version 7.11.2 onwards, it uses packageserver with apt. Which means there is
 little reason to change the installer anymore.
+
+From Gitlab version 8.13.2 onwards, default OS is Ubuntu 16.04 Xenial, Ubuntu's next LTS release.
+Old 14.04 LTS installer (which is compatible with Gitlab still, just Vagrant base boxes differ)
+is found at `ubuntu-14.04` branch.
 
 
 Gitlab CI
