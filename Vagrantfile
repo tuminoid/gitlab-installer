@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-# Copyright 2013, 2014, 2015 Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 Vagrant.require_version ">= 1.5.0"
 
@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.define :gitlab do |config|
     # Configure some hostname here
     config.vm.hostname = "gitlab.invalid"
-    config.vm.box = "ubuntu/trusty64"
+    config.vm.box = "ubuntu/xenial64"
     config.vm.provision :shell, :path => "install-gitlab.sh"
 
     # On Linux, we cannot forward ports <1024
@@ -28,16 +28,18 @@ Vagrant.configure("2") do |config|
   config.vm.provider "vmware_fusion" do |v, override|
     v.vmx["memsize"] = "2048"
     v.vmx["numvcpus"] = "2"
-    override.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+    # untested, no vmware license anymore, puppetlabs' vm worked for 14.04
+    override.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
   end
 
   config.vm.provider "parallels" do |v, override|
     v.cpus = 2
     v.memory = 2048
-    override.vm.box = "parallels/ubuntu-14.04"
+    # waiting for official "parallels/ubuntu-16.04" vm
+    override.vm.box = "boxcutter/ubuntu1604"
   end
 
   config.vm.provider "lxc" do |v, override|
-    override.vm.box = "fgrehm/trusty64-lxc"
+    override.vm.box = "developerinlondon/ubuntu_lxc_xenial_x64"
   end
 end
