@@ -1,7 +1,7 @@
 gitlab-installer
 ================
 
-Easy Gitlab installer, targeting Ubuntu 14.04 LTS, on Vagrant or on metal.
+Easy Gitlab installer, targeting Ubuntu 16.04 LTS, on Vagrant or on metal.
 
 Supported Vagrant providers:
  * Virtualbox
