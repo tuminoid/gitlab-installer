@@ -1,9 +1,9 @@
 # Change the external_url to the address your users will type in their browser
 # if http
-# external_url 'http://gitlab.invalid/'
+# external_url 'http://gitlab.local/'
 
 # if https
-external_url 'https://gitlab.invalid/'
+external_url 'https://gitlab.local/'
 nginx['redirect_http_to_https'] = true
 nginx['ssl_certificate'] = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 nginx['ssl_certificate_key'] = "/etc/ssl/private/ssl-cert-snakeoil.key"
@@ -48,7 +48,7 @@ gitlab_rails['gitlab_default_projects_features_builds'] = true
 gitlab_rails['backup_keep_time'] = 2404800
 
 # unicorn conf
-unicorn['worker_processes'] = 4
+unicorn['worker_processes'] = 2
 unicorn['worker_timeout'] = 180
 
 # runit logs

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright (c) 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # Usage: Copy 'gitlab.rb.example' as 'gitlab.rb', then 'vagrant up'.
 
@@ -9,7 +9,7 @@ set -e
 GITLAB_FLAVOR="gitlab-ce"
 
 # This is for postfix
-GITLAB_HOSTNAME="gitlab.invalid"
+GITLAB_HOSTNAME="gitlab.local"
 
 
 
