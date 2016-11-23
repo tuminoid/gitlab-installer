@@ -57,6 +57,16 @@ set_apt_pdiff_off()
     echo 'Acquire::PDiffs "false";' > /etc/apt/apt.conf.d/85pdiff-off
 }
 
+install_swap_file()
+{
+    SWAP_FILE=/.swap.2G
+    dd if=/dev/zero of=$SWAP_FILE bs=1M count=2k
+    mkswap $SWAP_FILE
+    echo "$SWAP_FILE none swap sw 0 0" >> /etc/fstab
+    chmod 600 $SWAP_FILE
+    swapon -a
+}
+
 
 # All commands expect root access.
 check_for_root
@@ -64,6 +74,9 @@ check_for_root
 # Check for configs that are not compatible anymore
 check_for_gitlab_rb
 check_for_backwards_compatibility
+
+# install swap file for more memory
+install_swap_file
 
 # install tools to automate this install
 apt-get -y update
