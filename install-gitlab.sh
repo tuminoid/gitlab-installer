@@ -5,12 +5,10 @@
 
 set -e
 
-# Gitlab flavor to install
-GITLAB_FLAVOR="gitlab-ce"
-
-# This is for postfix
-GITLAB_HOSTNAME="gitlab.local"
-
+# these are normally passed via Vagrantfile to environment
+# but if you run this on bare metal they need to be reset
+GITLAB_HOSTNAME=${GITLAB_HOSTNAME:-127.0.0.1}
+GITLAB_PORT=${GITLAB_PORT:-443}
 
 
 #
@@ -59,12 +57,23 @@ set_apt_pdiff_off()
 
 install_swap_file()
 {
-    SWAP_FILE=/.swap.2G
-    dd if=/dev/zero of=$SWAP_FILE bs=1M count=2k
-    mkswap $SWAP_FILE
-    echo "$SWAP_FILE none swap sw 0 0" >> /etc/fstab
-    chmod 600 $SWAP_FILE
-    swapon -a
+    # "GITLAB_SWAP" is passed in environment by shell provisioner
+    if [[ $GITLAB_SWAP > 0 ]]; then
+        echo "Creating swap file of ${GITLAB_SWAP}G size"
+        SWAP_FILE=/.swap.file
+        dd if=/dev/zero of=$SWAP_FILE bs=1G count=$GITLAB_SWAP
+        mkswap $SWAP_FILE
+        echo "$SWAP_FILE none swap sw 0 0" >> /etc/fstab
+        chmod 600 $SWAP_FILE
+        swapon -a
+    else
+        echo "Skipped swap file creation due 'GITLAB_SWAP' set to 0"
+    fi
+}
+
+rewrite_hostname()
+{
+    sed -i -e "s,^external_url.*,external_url 'https://${GITLAB_HOSTNAME}/'," /etc/gitlab/gitlab.rb
 }
 
 
@@ -80,7 +89,7 @@ install_swap_file
 
 # install tools to automate this install
 apt-get -y update
-apt-get -y install debconf-utils wget curl
+apt-get -y install debconf-utils curl
 
 # install the few dependencies we have
 echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
@@ -91,18 +100,20 @@ apt-get -y install openssh-server postfix
 apt-get -y install ca-certificates ssl-cert
 make-ssl-cert generate-default-snakeoil --force-overwrite
 
-# download omnibus-gitlab package (250M) and cache it
+# download omnibus-gitlab package (300M) with apt
+# vagrant-cachier plugin hightly recommended
 echo "Setting up Gitlab deb repository ..."
 set_apt_pdiff_off
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
-echo "Installing $GITLAB_FLAVOR via apt ..."
-apt-get install -y $GITLAB_FLAVOR
+echo "Installing gitlab-ce via apt ..."
+apt-get install -y gitlab-ce
 
 # fix the config and reconfigure
 cp /vagrant/gitlab.rb /etc/gitlab/gitlab.rb
+rewrite_hostname
 gitlab-ctl reconfigure
 
 # done
 echo "Done!"
-echo " Login at your host:port with 'root' + '5iveL!fe'"
+echo " Login at https://${GITLAB_HOSTNAME}:${GITLAB_PORT}/, username 'root'. Password will be reset on first login."
 echo " Config found at /etc/gitlab/gitlab.rb and updated by 'sudo gitlab-ctl reconfigure'"

@@ -11,6 +11,7 @@ Supported Vagrant providers:
 Untested Vagrant providers (worked with 14.04 LTS):
  * VMWare
 
+
 Usage
 =====
 
@@ -20,7 +21,24 @@ For complete template, please see https://gitlab.com/gitlab-org/omnibus-gitlab/b
 In VM, Gitlab is available at https://127.0.0.1:8443/
 In server install, Gitlab is available at https://127.0.0.1/
 
-CI is integrated into Gitlab from version 8 onwards. 
+CI is integrated into Gitlab from version 8.0 onwards.
+
+
+Configuration
+=============
+
+You can configure the VM running Gitlab by exporting environment variables on host side before issuing `vagrant up`:
+ * `GITLAB_CPUS` = how many CPUs will be given to the VM (default `2`)
+ * `GITLAB_MEMORY` = how much memory (in MB) will be used (default `2048`)
+ * `GITLAB_PORT` = which port on the host Gitlab responds to (default `8443`)
+ * `GITLAB_SWAP` = if you want a swap file within VM (low memory host), in G (default `0`)
+ * `GITLAB_HOST` = set hostname (default is `gitlab.local`)
+
+Example:
+```
+ $ export GITLAB_MEMORY=4096
+ $ vagrant up
+```
 
 
 Releases
@@ -40,8 +58,8 @@ Old 14.04 LTS installer (which is compatible with Gitlab still, just Vagrant bas
 is found at `ubuntu-14.04` branch.
 
 
-Gitlab CI
-=========
+Gitlab CI integration
+=====================
 
 Gitlab CI and Gitlab CI Runner scripts were split into separate repository. You can find them at:
 https://github.com/tuminoid/gitlabci-installer
@@ -52,7 +70,7 @@ To disable CI, comment out `ci_external_url` line in script.
 From 8 onwards, CI is part of Gitlab. You need to comment out following lines in `gitlab.rb`
 (if you reuse your old `gitlab.rb`):
 ```
-# ci_external_url 'http://gitlabci.invalid/'
+# ci_external_url 'http://gitlabci.local/'
 # nginx['redirect_http_to_https'] = false
 ```
 
