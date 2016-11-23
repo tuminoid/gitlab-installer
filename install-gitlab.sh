@@ -8,7 +8,7 @@ set -e
 # these are normally passed via Vagrantfile to environment
 # but if you run this on bare metal they need to be reset
 GITLAB_HOSTNAME=${GITLAB_HOSTNAME:-127.0.0.1}
-GITLAB_PORT=${GITLAB_PORT:-443}
+GITLAB_PORT=${GITLAB_PORT:-8443}
 
 
 #
