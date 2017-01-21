@@ -3,12 +3,11 @@
 # Copyright (c) 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # read configurable cpu/memory/port/swap/flavor settings from environment variables
-memory = ENV['GITLAB_MEMORY'] or 2048
-cpus = ENV['GITLAB_CPUS'] or 2
-port = ENV['GITLAB_PORT'] or 8443
-swap = ENV['GITLAB_SWAP'] or 0
-host = ENV['GITLAB_HOST'] or "gitlab.local"
-
+memory = ENV['GITLAB_MEMORY'] || 2048
+cpus = ENV['GITLAB_CPUS'] || 1
+port = ENV['GITLAB_PORT'] || 8443
+swap = ENV['GITLAB_SWAP'] || 0
+host = ENV['GITLAB_HOST'] || "gitlab.local"
 
 Vagrant.require_version ">= 1.5.0"
 
