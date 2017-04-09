@@ -11,6 +11,7 @@ Supported Vagrant providers:
 Untested Vagrant providers (worked with 14.04 LTS):
  * VMWare
 
+Requires Vagrant >= 1.8.0.
 
 Usage
 =====
