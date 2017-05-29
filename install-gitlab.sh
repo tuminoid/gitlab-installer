@@ -10,7 +10,6 @@ set -e
 GITLAB_HOSTNAME=${GITLAB_HOSTNAME:-127.0.0.1}
 GITLAB_PORT=${GITLAB_PORT:-8443}
 
-
 #
 #  --------------------------------
 #  Installation - no need to touch!
@@ -36,6 +35,18 @@ check_for_gitlab_rb()
 {
     if [[ ! -e /vagrant/gitlab.rb ]]; then
         fatal "gitlab.rb not found at /vagrant"
+        exit 1
+    fi
+}
+
+set_gitlab_edition()
+{
+    if [[ $GITLAB_EDITION == "community" ]]; then
+        GITLAB_PACKAGE=gitlab-ce
+    elif [[ $GITLAB_EDITION == "enterprise" ]]; then
+        GITLAB_PACKAGE=gitlab-ee
+    else
+        fatal "\"${GITLAB_EDITION}\" is not a supported GitLab edition"
         exit 1
     fi
 }
@@ -76,9 +87,11 @@ rewrite_hostname()
     sed -i -e "s,^external_url.*,external_url 'https://${GITLAB_HOSTNAME}/'," /etc/gitlab/gitlab.rb
 }
 
-
 # All commands expect root access.
 check_for_root
+
+# Check that the GitLab edition which is defined is supported and set package name
+set_gitlab_edition
 
 # Check for configs that are not compatible anymore
 check_for_gitlab_rb
@@ -104,9 +117,9 @@ make-ssl-cert generate-default-snakeoil --force-overwrite
 # vagrant-cachier plugin hightly recommended
 echo "Setting up Gitlab deb repository ..."
 set_apt_pdiff_off
-curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
-echo "Installing gitlab-ce via apt ..."
-apt-get install -y gitlab-ce
+curl https://packages.gitlab.com/install/repositories/gitlab/${GITLAB_PACKAGE}/script.deb.sh | sudo bash
+echo "Installing ${GITLAB_PACKAGE} via apt ..."
+apt-get install -y ${GITLAB_PACKAGE}
 
 # fix the config and reconfigure
 cp /vagrant/gitlab.rb /etc/gitlab/gitlab.rb

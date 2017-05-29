@@ -2,12 +2,13 @@
 # vi: set ft=ruby :
 # Copyright (c) 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
 
-# read configurable cpu/memory/port/swap/flavor settings from environment variables
+# read configurable cpu/memory/port/swap/host/edition settings from environment variables
 memory = ENV['GITLAB_MEMORY'] || 2048
 cpus = ENV['GITLAB_CPUS'] || 1
 port = ENV['GITLAB_PORT'] || 8443
 swap = ENV['GITLAB_SWAP'] || 0
 host = ENV['GITLAB_HOST'] || "gitlab.local"
+edition = ENV['GITLAB_EDITION'] || "community"
 
 Vagrant.require_version ">= 1.8.0"
 
@@ -18,7 +19,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = host
     config.vm.box = "ubuntu/xenial64"
     config.vm.provision :shell, :path => "install-gitlab.sh",
-      env: { "GITLAB_SWAP" => swap, "GITLAB_HOSTNAME" => host, "GITLAB_PORT" => port }
+      env: { "GITLAB_SWAP" => swap, "GITLAB_HOSTNAME" => host, "GITLAB_PORT" => port, "GITLAB_EDITION" => edition }
 
     # On Linux, we cannot forward ports <1024
     # We need to use higher ports, and have port forward or nginx proxy
