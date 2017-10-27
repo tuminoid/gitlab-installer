@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-# Copyright (c) 2013-2016 Tuomo Tanskanen <tuomo@tanskanen.org>
+# Copyright (c) 2013-2017 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # read configurable cpu/memory/port/swap/host/edition settings from environment variables
 memory = ENV['GITLAB_MEMORY'] || 2048
@@ -26,6 +26,9 @@ Vagrant.configure("2") do |config|
     # or access the site via hostname:<port>, in this case 127.0.0.1:8080
     # By default, Gitlab is at https + port 8443
     config.vm.network :forwarded_port, guest: 443, host: port
+
+    # use rsync for synced folder to avoid the need for provider tools
+    config.vm.synced_folder ".", "/vagrant", type: "rsync"
   end
 
   # GitLab recommended specs
@@ -44,8 +47,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "parallels" do |v, override|
     v.cpus = cpus
     v.memory = memory
-    # waiting for official "parallels/ubuntu-16.04" vm
-    override.vm.box = "boxcutter/ubuntu1604"
+    override.vm.box = "puphpet/ubuntu1604-x64"
   end
 
   config.vm.provider "lxc" do |v, override|

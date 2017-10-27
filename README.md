@@ -6,10 +6,10 @@ Easy Gitlab installer, targeting Ubuntu 16.04 LTS, on Vagrant or on metal.
 Supported Vagrant providers:
  * Virtualbox
  * Parallels
- * LXC
 
 Untested Vagrant providers (worked with 14.04 LTS):
  * VMWare
+ * LXC
 
 Requires Vagrant >= 1.8.0.
 
@@ -39,7 +39,7 @@ You can configure the VM running Gitlab by exporting environment variables on ho
 Example:
 ```
  $ export GITLAB_MEMORY=4096
- $ vagrant up
+ $ vagrant up
 ```
 
 
