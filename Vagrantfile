@@ -3,7 +3,7 @@
 # Copyright (c) 2013-2017 Tuomo Tanskanen <tuomo@tanskanen.org>
 
 # read configurable cpu/memory/port/swap/host/edition settings from environment variables
-memory = ENV['GITLAB_MEMORY'] || 2048
+memory = ENV['GITLAB_MEMORY'] || 3072
 cpus = ENV['GITLAB_CPUS'] || 1
 port = ENV['GITLAB_PORT'] || 8443
 swap = ENV['GITLAB_SWAP'] || 0
