@@ -17,7 +17,8 @@ Vagrant.configure("2") do |config|
   config.vm.define :gitlab do |config|
     # Configure some hostname here
     config.vm.hostname = host
-    config.vm.box = "ubuntu/xenial64"
+	# bento/ubuntu-16.04 provides boxes for virtualbox. vmware_desktop(fusion, workstation) and parallels
+    config.vm.box = "bento/ubuntu-16.04"
     config.vm.provision :shell, :path => "install-gitlab.sh",
       env: { "GITLAB_SWAP" => swap, "GITLAB_HOSTNAME" => host, "GITLAB_PORT" => port, "GITLAB_EDITION" => edition }
 
@@ -28,26 +29,29 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, guest: 443, host: port
 
     # use rsync for synced folder to avoid the need for provider tools
-    config.vm.synced_folder ".", "/vagrant", type: "rsync"
+	# added rsync__auto  to enable detect changes on host and sync to guest machine and exclude .git/
+    config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/", rsync__auto: true
   end
 
   # GitLab recommended specs
-  config.vm.provider "virtualbox" do |v, override|
+  config.vm.provider "virtualbox" do |v|
     v.cpus = cpus
     v.memory = memory
   end
-
-  config.vm.provider "vmware_fusion" do |v, override|
-    v.vmx["memsize"] = "#{memory}"
-    v.vmx["numvcpus"] = "#{cpus}"
-    # untested, no vmware license anymore, puppetlabs' vm worked for 14.04
-    override.vm.box = "puppetlabs/ubuntu-16.04-64-puppet"
+  
+  # vmware Workstation and Fusion Provider this will work for both vmware versions as the virtual machines
+  # images are identical is a fuzzy term which will allow both to work effecively for ether Fusion for the
+  # Mac or Workstation for the PC. It only matters which provider is specified on vagrant up command
+  # (--provider=vmware_fusion or --provider=vmware_workstation)
+  # vmware provieder requires hashicorp license https://www.vagrantup.com/vmware/index.html
+  config.vm.provider "vmware_desktop" do |v|
+	v.vmx["memsize"] = "#{memory}"
+	v.vmx["numvcpus"] = "#{cpus}"
   end
-
-  config.vm.provider "parallels" do |v, override|
+  
+  config.vm.provider "parallels" do |v|
     v.cpus = cpus
     v.memory = memory
-    override.vm.box = "puphpet/ubuntu1604-x64"
   end
 
   config.vm.provider "lxc" do |v, override|
