@@ -100,9 +100,8 @@ check_for_backwards_compatibility
 # install swap file for more memory
 install_swap_file
 
-# install tools to automate this install and apply updates
+# install tools to automate this install
 apt-get -y update
-apt-get -y upgrade
 apt-get -y install debconf-utils curl
 
 # install the few dependencies we have
