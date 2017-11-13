@@ -4,7 +4,7 @@
 
 # read configurable cpu/memory/port/swap/host/edition settings from environment variables
 memory = ENV['GITLAB_MEMORY'] || 3072
-cpus = ENV['GITLAB_CPUS'] || 1
+cpus = ENV['GITLAB_CPUS'] || 2
 port = ENV['GITLAB_PORT'] || 8443
 swap = ENV['GITLAB_SWAP'] || 0
 host = ENV['GITLAB_HOST'] || "gitlab.local"
