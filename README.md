@@ -30,7 +30,7 @@ Configuration
 
 You can configure the VM running Gitlab by exporting environment variables on host side before issuing `vagrant up`:
  * `GITLAB_CPUS` = how many CPUs will be given to the VM (default `2`)
- * `GITLAB_MEMORY` = how much memory (in MB) will be used (default `2048`)
+ * `GITLAB_MEMORY` = how much memory (in MB) will be used (default `3072`)
  * `GITLAB_PORT` = which port on the host Gitlab responds to (default `8443`)
  * `GITLAB_SWAP` = if you want a swap file within VM (low memory host), in G (default `0`)
  * `GITLAB_HOST` = set hostname (default is `gitlab.local`)
