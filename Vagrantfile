@@ -9,6 +9,7 @@ port = ENV['GITLAB_PORT'] || 8443
 swap = ENV['GITLAB_SWAP'] || 0
 host = ENV['GITLAB_HOST'] || "gitlab.local"
 edition = ENV['GITLAB_EDITION'] || "community"
+private_network = ENV['GITLAB_PRIVATE_NETWORK'] || 0
 
 Vagrant.require_version ">= 1.8.0"
 
@@ -27,6 +28,7 @@ Vagrant.configure("2") do |config|
     # or access the site via hostname:<port>, in this case 127.0.0.1:8080
     # By default, Gitlab is at https + port 8443
     config.vm.network :forwarded_port, guest: 443, host: port
+    config.vm.network "private_network", type: "dhcp" if private_network == '1'
 
     # use rsync for synced folder to avoid the need for provider tools
 	# added rsync__auto  to enable detect changes on host and sync to guest machine and exclude .git/
