@@ -35,6 +35,7 @@ You can configure the VM running Gitlab by exporting environment variables on ho
  * `GITLAB_SWAP` = if you want a swap file within VM (low memory host), in G (default `0`)
  * `GITLAB_HOST` = set hostname (default is `gitlab.local`)
  * `GITLAB_EDITION` = set GitLab edition which you would like to use. (default is `community`; options are `community` or `enterprise`)
+ * `GITLAB_PRIVATE_NETWORK` = add a private network interface
 
 Example:
 ```
