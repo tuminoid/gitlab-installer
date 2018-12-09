@@ -18,8 +18,8 @@ Vagrant.configure("2") do |config|
   config.vm.define :gitlab do |config|
     # Configure some hostname here
     config.vm.hostname = host
-	# bento/ubuntu-16.04 provides boxes for virtualbox. vmware_desktop(fusion, workstation) and parallels
-    config.vm.box = "bento/ubuntu-16.04"
+	  # bento/ubuntu-18.04 provides boxes for virtualbox. vmware_desktop(fusion, workstation) and parallels
+    config.vm.box = "bento/ubuntu-18.04"
     config.vm.provision :shell, :path => "install-gitlab.sh",
       env: { "GITLAB_SWAP" => swap, "GITLAB_HOSTNAME" => host, "GITLAB_PORT" => port, "GITLAB_EDITION" => edition }
 
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
     v.cpus = cpus
     v.memory = memory
   end
-  
+
   # vmware Workstation and Fusion Provider this will work for both vmware versions as the virtual machines
   # images are identical is a fuzzy term which will allow both to work effecively for ether Fusion for the
   # Mac or Workstation for the PC. It only matters which provider is specified on vagrant up command
@@ -50,12 +50,13 @@ Vagrant.configure("2") do |config|
 	v.vmx["memsize"] = "#{memory}"
 	v.vmx["numvcpus"] = "#{cpus}"
   end
-  
+
   config.vm.provider "parallels" do |v|
     v.cpus = cpus
     v.memory = memory
   end
 
+  # TODO: This is outdated 16.04 box
   config.vm.provider "lxc" do |v, override|
     override.vm.box = "developerinlondon/ubuntu_lxc_xenial_x64"
   end
